@@ -10,10 +10,12 @@ import static spark.Spark.*;
 
 public class HttpServer implements Runnable {
     private final List<MimeMessage> messages;
+    private final IncomingMailsObservable observable;
     private final int port;
 
-    public HttpServer(List<MimeMessage> messages, int port) {
+    public HttpServer(List<MimeMessage> messages, IncomingMailsObservable observable, int port) {
         this.messages = messages;
+        this.observable = observable;
         this.port = port;
     }
 
@@ -29,6 +31,7 @@ public class HttpServer implements Runnable {
 
         port(port);
         staticFiles.location("/frontend-build");
+        webSocket("/notify", new NotifySocket(observable));
         get("/hello", (req, res) -> "Hello World");
         get("/messages", (req, res) -> {
             res.type("application/json");

@@ -22,11 +22,17 @@ export default {
   data() {
     return {
       mails: [],
-      selectedMail: null
+      selectedMail: null,
+      socket: null
     };
   },
   async created() {
     await this.loadMail();
+    this.initializeWebsocket();
+  },
+  destroyed() {
+    this.socket.close();
+    this.socket = null;
   },
   methods: {
     async loadMail() {
@@ -34,6 +40,15 @@ export default {
     },
     selectMail(mail) {
       this.selectedMail = mail;
+    },
+    initializeWebsocket() {
+      let ws = new WebSocket("ws://localhost:8080/notify");
+
+      ws.addEventListener("message", () => this.loadMail());
+      ws.addEventListener("open", () => console.log("ws-open"));
+      ws.addEventListener("close", () => console.log("ws-close"));
+
+      this.socket = ws;
     }
   }
 };

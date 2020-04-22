@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group 'dev.sonnenschein'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 13
+targetCompatibility = 13
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+
+    implementation group: 'com.github.davidmoten', name: 'subethasmtp', version: '5.2.2'
+    implementation "com.sparkjava:spark-core:2.8.0"
+    implementation 'com.google.code.gson:gson:2.8.6'
+}

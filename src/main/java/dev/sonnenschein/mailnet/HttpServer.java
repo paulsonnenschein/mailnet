@@ -3,14 +3,10 @@ package dev.sonnenschein.mailnet;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
 
-import static spark.Spark.get;
-import static spark.Spark.port;
+import static spark.Spark.*;
 
 public class HttpServer implements Runnable {
     private final List<MimeMessage> messages;
@@ -32,19 +28,11 @@ public class HttpServer implements Runnable {
                 .create();
 
         port(port);
+        staticFiles.location("/frontend-build");
         get("/hello", (req, res) -> "Hello World");
         get("/messages", (req, res) -> {
-            res.type("text/plain");
-            messages.forEach(m -> {
-                try {
-                    PrintStream outputStream = new PrintStream(res.raw().getOutputStream());
-                    DebugUtil.debugMessage(m, outputStream);
-                } catch (MessagingException | IOException e) {
-                    e.printStackTrace();
-                }
-            });
-            return "";
-        });
-        get("/messages_json", (req, res) -> messages, gson::toJson);
+            res.type("application/json");
+            return messages;
+        }, gson::toJson);
     }
 }

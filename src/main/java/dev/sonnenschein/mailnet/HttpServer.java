@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static spark.Spark.get;
@@ -40,7 +38,7 @@ public class HttpServer implements Runnable {
             messages.forEach(m -> {
                 try {
                     PrintStream outputStream = new PrintStream(res.raw().getOutputStream());
-                    App.debugMessage(m, outputStream);
+                    DebugUtil.debugMessage(m, outputStream);
                 } catch (MessagingException | IOException e) {
                     e.printStackTrace();
                 }

@@ -32,7 +32,7 @@ public class SmtpServer implements Runnable {
                                 InputStream is = new ByteArrayInputStream(data);
                                 MimeMessage message = new MimeMessage(session, is);
                                 messages.add(message);
-                                App.debugMessage(message, System.out);
+                                DebugUtil.debugMessage(message, System.out);
                             } catch (MessagingException | IOException e) {
                                 e.printStackTrace();
                             }
